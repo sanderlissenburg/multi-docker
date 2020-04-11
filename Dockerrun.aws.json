@@ -2,7 +2,7 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
-      "name": "multi-docker-client",
+      "name": "client",
       "image": "lissenburg/multi-docker-client",
       "hostname": "client",
       "essential": false,
