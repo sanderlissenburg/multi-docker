@@ -22,3 +22,15 @@ after_success:
   - docker push lissenburg/multi-docker-nginx
   - docker push lissenburg/multi-docker-server
   - docker push lissenburg/multi-docker-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-1'
+  app: 'multi-docker'
+  env: 'MultiDocker-env'
+  bucket_name: 'elasticbeanstalk-us-east-1-505452423620'
+  bucket_path: 'multi-docker'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
