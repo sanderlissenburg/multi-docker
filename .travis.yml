@@ -17,7 +17,7 @@ before_install:
   - gcloud config set compute/zone europe-west1-b
   - gcloud container clusters get-credentials mulit-docker-cluster
   # - gcloud container clusters get-credentials multi-docker-cluster
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker build -t lissenburg/multi-docker-client-test -f ./client/Dockerfile.dev ./client
 
 script:
