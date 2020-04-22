@@ -1,9 +1,30 @@
 sudo: required
 services:
   - docker
+
+env:
+  global:
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+    - GIT_SHA=$(git rev-parse HEAD)
+
 before_install:
+  - openssl aes-256-cbc -K $encrypted_94b7cc54b50a_key -iv $encrypted_94b7cc54b50a_iv -in service-account.json.enc -out service-account.json -d
   - curl https://sdk.cloud.google.com | bash > /dev/null;
   - source $HOME/google-cloud-sdk/path.bash.inc
   - gcloud components update kubectl
   - gcloud auth activate-service-account --key-file service-account.json
-  -
+  - gcloud config set project multi-docker-274805
+  - gcloud config set compute/zone europe-west1-b
+  - gcloud container clusters get-credentials mulit-docker-cluster
+  # - gcloud container clusters get-credentials multi-docker-cluster
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t lissenburg/multi-docker-client-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true lissenburg/multi-docker-client-test npm run test
+
+deploy:
+  provider: script
+  script: bash ./deploy.sh
+  on:
+    branch: master
